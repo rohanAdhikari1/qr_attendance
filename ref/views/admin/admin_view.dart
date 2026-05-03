@@ -397,7 +397,6 @@ class _SettingsCard extends StatefulWidget {
 }
 
 class _SettingsCardState extends State<_SettingsCard> {
-  final _storage = Get.find<dynamic>(); // accessed via ctrl
   late final _schoolCtrl = TextEditingController(
       text: Get.find<AdminController>().schoolName.value);
   late final _urlCtrl = TextEditingController(

@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../controllers/attendance_controller.dart';
 import '../../controllers/sync_controller.dart';
 import '../../routes/app_pages.dart';
 import '../../services/connectivity_service.dart';
@@ -107,15 +106,15 @@ class _Header extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Obx(() => Text(
-              //       storage.schoolName,
-              //       style: const TextStyle(
-              //         color: AppColors.textPrimary,
-              //         fontSize: 16,
-              //         fontWeight: FontWeight.w700,
-              //       ),
-              //       overflow: TextOverflow.ellipsis,
-              //     )),
+               Text(
+                    storage.schoolName,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
               const Text(
                 'Attendance System',
                 style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
@@ -350,14 +349,6 @@ class _QuickActions extends StatelessWidget {
                     : null,
                 isLoading: sync.isSyncing.value,
               )),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _ActionTile(
-            icon: Icons.admin_panel_settings_rounded,
-            label: 'Admin',
-            onTap: () => Get.toNamed(AppRoutes.admin),
-          ),
         ),
       ],
     );

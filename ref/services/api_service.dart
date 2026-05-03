@@ -51,10 +51,10 @@ class StudentInfo {
 // ─── Dio API Service ──────────────────────────────────────────────────────────
 
 class ApiService {
-  final LocalStorageService _storage;
+  final LocalStorageService _storage = LocalStorageService();
   late Dio _dio;
 
-  ApiService(this._storage) {
+  ApiService() {
     _dio = _buildDio();
   }
 

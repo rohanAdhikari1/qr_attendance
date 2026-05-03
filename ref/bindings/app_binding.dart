@@ -7,16 +7,18 @@ import '../controllers/sync_controller.dart';
 import '../services/api_service.dart';
 import '../services/connectivity_service.dart';
 import '../services/lan_server_service.dart';
-import '../services/local_storage_service.dart';
+import '../services/storage_service.dart';
 import '../services/student_cache_service.dart';
 
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<LocalStorageService>(LocalStorageService(), permanent: true);
+    // Initialize Storage Service (GetxStorage + Drift)
+    Get.put<StorageService>(StorageService(), permanent: true);
+    
     Get.put<ConnectivityService>(ConnectivityService(), permanent: true);
     Get.put<ApiService>(
-      ApiService(Get.find<LocalStorageService>()),
+      ApiService(),
       permanent: true,
     );
     var cn = Get.put<StudentCacheService>(
@@ -28,23 +30,23 @@ class AppBinding extends Bindings {
     );
     cn.init();
     Get.put<LanServerService>(
-      LanServerService(Get.find<LocalStorageService>()),
+      LanServerService(Get.find<StorageService>()),
       permanent: true,
     );
     Get.put<SyncController>(
       SyncController(
-        Get.find<LocalStorageService>(),
+        Get.find<StorageService>(),
         Get.find<ApiService>(),
         Get.find<ConnectivityService>(),
       ),
       permanent: true,
     );
     Get.put<AttendanceController>(
-      AttendanceController(Get.find<LocalStorageService>()),
+      AttendanceController(Get.find<StorageService>()),
     );
     Get.put<ScannerController>(
       ScannerController(
-        Get.find<LocalStorageService>(),
+        Get.find<StorageService>(),
         Get.find<ApiService>(),
         Get.find<ConnectivityService>(),
         Get.find<SyncController>(),
@@ -54,7 +56,7 @@ class AppBinding extends Bindings {
     );
     Get.put<AdminController>(
       AdminController(
-        Get.find<LocalStorageService>(),
+        Get.find<StorageService>(),
         Get.find<ApiService>(),
         Get.find<ConnectivityService>(),
         Get.find<SyncController>(),
