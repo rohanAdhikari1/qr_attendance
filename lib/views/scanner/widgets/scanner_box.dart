@@ -23,7 +23,7 @@ class CameraSection extends GetView<ScannerController> {
           Positioned.fill(
             child: MobileScanner(
               controller: controller.cameraController,
-              onDetect: controller.onQrDetected,
+              onDetect:(BarcodeCapture capture) async{},
             ),
           ),
 
