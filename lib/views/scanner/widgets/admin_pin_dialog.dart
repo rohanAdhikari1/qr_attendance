@@ -57,7 +57,7 @@ class AdminPinDialog extends GetView<AdminPinController> {
               ),
               onSubmitted: (_) {
                 controller.submit(() {
-                  Navigator.of(context).pop();
+                  Get.back();
                 });
               },
             ),
@@ -80,7 +80,7 @@ class AdminPinDialog extends GetView<AdminPinController> {
         ElevatedButton(
           onPressed: () {
             controller.submit(() {
-              Navigator.of(context).pop();
+              Get.back();
             });
           },
           child: const Text('Unlock'),
