@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_attendance/controllers/camera_controller.dart';
 import 'package:qr_attendance/controllers/corner_painter.dart';
+import 'package:qr_attendance/controllers/scanner_controller.dart';
 import 'package:qr_attendance/theme/app_theme.dart';
 
 class ScannerBox extends GetView<CameraController> {
   const ScannerBox({super.key});
+  ScannerController get scanner => GetInstance().find<ScannerController>();
 
   static const _boxSize = 240.0;
   static const _beamTravel = _boxSize - 24.0;
@@ -22,11 +25,10 @@ class ScannerBox extends GetView<CameraController> {
             borderRadius: BorderRadius.circular(14),
             child: Container(
               color: AppColors.surface,
-              child: const Center(
-                child: Icon(
-                  Icons.qr_code_scanner_rounded,
-                  size: 72,
-                  color: AppColors.surfaceVariant,
+              child: Center(
+                child: MobileScanner(
+                  controller: scanner.cameraController,
+                  onDetect:(BarcodeCapture capture) async{},
                 ),
               ),
             ),

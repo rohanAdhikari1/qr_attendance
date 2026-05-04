@@ -11,6 +11,19 @@ class ScannerController extends GetxController {
   final _uuid = const Uuid();
   MobileScannerController cameraController = MobileScannerController();
 
+  final Map<String, dynamic> fakeStudent = {
+    "name": "John Doe",
+    "studentId": "ST-2026-001",
+    "classSection": "10-A",
+    "status": "Present",
+    "subject": "Mathematics",
+    "room": "Room 12",
+    "checkInTime": "08:42 AM",
+  };
+  var scannedStudent = Rxn<Map<String, dynamic>>();
+
+  var overlayCountdown = 5.obs;
+
   final scanState = ScanState.idle.obs;
   final lastScanned = Rxn<ScannedStudent>();
   final errorMessage = ''.obs;
@@ -23,12 +36,23 @@ class ScannerController extends GetxController {
     super.onInit();
     _initCamera();
     lastScanned.value = ScannedStudent(studentId: '123', timestamp: DateTime.now(), syncStatus: SyncStatus.synced);
+    showFakeSuccessOverlay();
   }
 
   @override
   void onClose() {
     cameraController.dispose();
     super.onClose();
+  }
+
+  void showFakeSuccessOverlay() {
+    scannedStudent.value = fakeStudent;
+
+    overlayCountdown.value = 5;
+
+    Future.delayed(const Duration(seconds: 5), () {
+      scannedStudent.value = null;
+    });
   }
 
   void _initCamera() {
