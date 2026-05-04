@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_attendance/controllers/scanner_controller.dart';
 import 'package:qr_attendance/theme/app_theme.dart';
+import 'package:qr_attendance/views/scanner/widgets/hint_card.dart';
 import 'package:qr_attendance/views/scanner/widgets/scanner_box.dart';
 import 'package:qr_attendance/views/scanner/widgets/clock_header.dart';
 import 'package:qr_attendance/views/scanner/widgets/grind_background.dart';
@@ -52,7 +53,7 @@ class ScannerPage extends GetView<ScannerController> {
                   ),
                   const SizedBox(height: 20),
                   const ScannerBox(),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 28),
                   const HintCard(),
                 ],
               ),
