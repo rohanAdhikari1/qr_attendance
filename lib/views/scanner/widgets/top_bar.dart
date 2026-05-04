@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_attendance/controllers/scanner_controller.dart';
 import 'package:qr_attendance/theme/app_theme.dart';
 
-class TopBar extends StatelessWidget {
+class TopBar extends GetView<ScannerController> {
   const TopBar({super.key});
 
   @override
@@ -14,13 +15,7 @@ class TopBar extends StatelessWidget {
           // Back (admin)
           GestureDetector(
             onTap: () {
-              Get.back();
-              // scanner.pauseCamera();
-              // showDialog(
-              //   context: context,
-              //   builder: (_) =>
-              //       // _AdminPinDialog(onDismiss: scanner.resumeCamera),
-              // );
+              controller.promptExit(context);
             },
             child: Container(
               padding: const EdgeInsets.all(8),

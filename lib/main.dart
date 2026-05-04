@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:qr_attendance/services/connectivity_service.dart';
+import 'package:qr_attendance/services/get_storage_service.dart';
 import 'routes/app_pages.dart';
 import 'theme/app_theme.dart';
 
@@ -18,7 +20,13 @@ void main() async {
       statusBarIconBrightness: Brightness.light,
     ),
   );
+  await initializeServices();
   runApp(const SchoolAttendanceApp());
+}
+
+Future<void> initializeServices() async{
+  Get.putAsync(() => ConnectivityService().init());
+  await Get.putAsync(() => GetStorageService().init());
 }
 
 class SchoolAttendanceApp extends StatelessWidget {
