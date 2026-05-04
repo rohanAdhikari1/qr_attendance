@@ -598,6 +598,15 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  @override
+  late final GeneratedColumn<String> phone = GeneratedColumn<String>(
+    'phone',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _classNameMeta = const VerificationMeta(
     'className',
   );
@@ -644,6 +653,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
   List<GeneratedColumn> get $columns => [
     studentId,
     name,
+    phone,
     className,
     grade,
     photoUrl,
@@ -676,6 +686,12 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
       );
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('phone')) {
+      context.handle(
+        _phoneMeta,
+        phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta),
+      );
     }
     if (data.containsKey('class_name')) {
       context.handle(
@@ -724,6 +740,10 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
         DriftSqlType.string,
         data['${effectivePrefix}name'],
       )!,
+      phone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone'],
+      ),
       className: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}class_name'],
@@ -752,6 +772,7 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
 class Student extends DataClass implements Insertable<Student> {
   final String studentId;
   final String name;
+  final String? phone;
   final String className;
   final String grade;
   final String? photoUrl;
@@ -759,6 +780,7 @@ class Student extends DataClass implements Insertable<Student> {
   const Student({
     required this.studentId,
     required this.name,
+    this.phone,
     required this.className,
     required this.grade,
     this.photoUrl,
@@ -769,6 +791,9 @@ class Student extends DataClass implements Insertable<Student> {
     final map = <String, Expression>{};
     map['student_id'] = Variable<String>(studentId);
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || phone != null) {
+      map['phone'] = Variable<String>(phone);
+    }
     map['class_name'] = Variable<String>(className);
     map['grade'] = Variable<String>(grade);
     if (!nullToAbsent || photoUrl != null) {
@@ -782,6 +807,9 @@ class Student extends DataClass implements Insertable<Student> {
     return StudentsCompanion(
       studentId: Value(studentId),
       name: Value(name),
+      phone: phone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phone),
       className: Value(className),
       grade: Value(grade),
       photoUrl: photoUrl == null && nullToAbsent
@@ -799,6 +827,7 @@ class Student extends DataClass implements Insertable<Student> {
     return Student(
       studentId: serializer.fromJson<String>(json['studentId']),
       name: serializer.fromJson<String>(json['name']),
+      phone: serializer.fromJson<String?>(json['phone']),
       className: serializer.fromJson<String>(json['className']),
       grade: serializer.fromJson<String>(json['grade']),
       photoUrl: serializer.fromJson<String?>(json['photoUrl']),
@@ -811,6 +840,7 @@ class Student extends DataClass implements Insertable<Student> {
     return <String, dynamic>{
       'studentId': serializer.toJson<String>(studentId),
       'name': serializer.toJson<String>(name),
+      'phone': serializer.toJson<String?>(phone),
       'className': serializer.toJson<String>(className),
       'grade': serializer.toJson<String>(grade),
       'photoUrl': serializer.toJson<String?>(photoUrl),
@@ -821,6 +851,7 @@ class Student extends DataClass implements Insertable<Student> {
   Student copyWith({
     String? studentId,
     String? name,
+    Value<String?> phone = const Value.absent(),
     String? className,
     String? grade,
     Value<String?> photoUrl = const Value.absent(),
@@ -828,6 +859,7 @@ class Student extends DataClass implements Insertable<Student> {
   }) => Student(
     studentId: studentId ?? this.studentId,
     name: name ?? this.name,
+    phone: phone.present ? phone.value : this.phone,
     className: className ?? this.className,
     grade: grade ?? this.grade,
     photoUrl: photoUrl.present ? photoUrl.value : this.photoUrl,
@@ -837,6 +869,7 @@ class Student extends DataClass implements Insertable<Student> {
     return Student(
       studentId: data.studentId.present ? data.studentId.value : this.studentId,
       name: data.name.present ? data.name.value : this.name,
+      phone: data.phone.present ? data.phone.value : this.phone,
       className: data.className.present ? data.className.value : this.className,
       grade: data.grade.present ? data.grade.value : this.grade,
       photoUrl: data.photoUrl.present ? data.photoUrl.value : this.photoUrl,
@@ -849,6 +882,7 @@ class Student extends DataClass implements Insertable<Student> {
     return (StringBuffer('Student(')
           ..write('studentId: $studentId, ')
           ..write('name: $name, ')
+          ..write('phone: $phone, ')
           ..write('className: $className, ')
           ..write('grade: $grade, ')
           ..write('photoUrl: $photoUrl, ')
@@ -859,13 +893,14 @@ class Student extends DataClass implements Insertable<Student> {
 
   @override
   int get hashCode =>
-      Object.hash(studentId, name, className, grade, photoUrl, cachedAt);
+      Object.hash(studentId, name, phone, className, grade, photoUrl, cachedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Student &&
           other.studentId == this.studentId &&
           other.name == this.name &&
+          other.phone == this.phone &&
           other.className == this.className &&
           other.grade == this.grade &&
           other.photoUrl == this.photoUrl &&
@@ -875,6 +910,7 @@ class Student extends DataClass implements Insertable<Student> {
 class StudentsCompanion extends UpdateCompanion<Student> {
   final Value<String> studentId;
   final Value<String> name;
+  final Value<String?> phone;
   final Value<String> className;
   final Value<String> grade;
   final Value<String?> photoUrl;
@@ -883,6 +919,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
   const StudentsCompanion({
     this.studentId = const Value.absent(),
     this.name = const Value.absent(),
+    this.phone = const Value.absent(),
     this.className = const Value.absent(),
     this.grade = const Value.absent(),
     this.photoUrl = const Value.absent(),
@@ -892,6 +929,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
   StudentsCompanion.insert({
     required String studentId,
     required String name,
+    this.phone = const Value.absent(),
     required String className,
     required String grade,
     this.photoUrl = const Value.absent(),
@@ -905,6 +943,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
   static Insertable<Student> custom({
     Expression<String>? studentId,
     Expression<String>? name,
+    Expression<String>? phone,
     Expression<String>? className,
     Expression<String>? grade,
     Expression<String>? photoUrl,
@@ -914,6 +953,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     return RawValuesInsertable({
       if (studentId != null) 'student_id': studentId,
       if (name != null) 'name': name,
+      if (phone != null) 'phone': phone,
       if (className != null) 'class_name': className,
       if (grade != null) 'grade': grade,
       if (photoUrl != null) 'photo_url': photoUrl,
@@ -925,6 +965,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
   StudentsCompanion copyWith({
     Value<String>? studentId,
     Value<String>? name,
+    Value<String?>? phone,
     Value<String>? className,
     Value<String>? grade,
     Value<String?>? photoUrl,
@@ -934,6 +975,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     return StudentsCompanion(
       studentId: studentId ?? this.studentId,
       name: name ?? this.name,
+      phone: phone ?? this.phone,
       className: className ?? this.className,
       grade: grade ?? this.grade,
       photoUrl: photoUrl ?? this.photoUrl,
@@ -950,6 +992,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (phone.present) {
+      map['phone'] = Variable<String>(phone.value);
     }
     if (className.present) {
       map['class_name'] = Variable<String>(className.value);
@@ -974,6 +1019,7 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     return (StringBuffer('StudentsCompanion(')
           ..write('studentId: $studentId, ')
           ..write('name: $name, ')
+          ..write('phone: $phone, ')
           ..write('className: $className, ')
           ..write('grade: $grade, ')
           ..write('photoUrl: $photoUrl, ')
@@ -1297,6 +1343,7 @@ typedef $$StudentsTableCreateCompanionBuilder =
     StudentsCompanion Function({
       required String studentId,
       required String name,
+      Value<String?> phone,
       required String className,
       required String grade,
       Value<String?> photoUrl,
@@ -1307,6 +1354,7 @@ typedef $$StudentsTableUpdateCompanionBuilder =
     StudentsCompanion Function({
       Value<String> studentId,
       Value<String> name,
+      Value<String?> phone,
       Value<String> className,
       Value<String> grade,
       Value<String?> photoUrl,
@@ -1330,6 +1378,11 @@ class $$StudentsTableFilterComposer
 
   ColumnFilters<String> get name => $composableBuilder(
     column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get phone => $composableBuilder(
+    column: $table.phone,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1373,6 +1426,11 @@ class $$StudentsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get phone => $composableBuilder(
+    column: $table.phone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get className => $composableBuilder(
     column: $table.className,
     builder: (column) => ColumnOrderings(column),
@@ -1408,6 +1466,9 @@ class $$StudentsTableAnnotationComposer
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get phone =>
+      $composableBuilder(column: $table.phone, builder: (column) => column);
 
   GeneratedColumn<String> get className =>
       $composableBuilder(column: $table.className, builder: (column) => column);
@@ -1452,6 +1513,7 @@ class $$StudentsTableTableManager
               ({
                 Value<String> studentId = const Value.absent(),
                 Value<String> name = const Value.absent(),
+                Value<String?> phone = const Value.absent(),
                 Value<String> className = const Value.absent(),
                 Value<String> grade = const Value.absent(),
                 Value<String?> photoUrl = const Value.absent(),
@@ -1460,6 +1522,7 @@ class $$StudentsTableTableManager
               }) => StudentsCompanion(
                 studentId: studentId,
                 name: name,
+                phone: phone,
                 className: className,
                 grade: grade,
                 photoUrl: photoUrl,
@@ -1470,6 +1533,7 @@ class $$StudentsTableTableManager
               ({
                 required String studentId,
                 required String name,
+                Value<String?> phone = const Value.absent(),
                 required String className,
                 required String grade,
                 Value<String?> photoUrl = const Value.absent(),
@@ -1478,6 +1542,7 @@ class $$StudentsTableTableManager
               }) => StudentsCompanion.insert(
                 studentId: studentId,
                 name: name,
+                phone: phone,
                 className: className,
                 grade: grade,
                 photoUrl: photoUrl,
