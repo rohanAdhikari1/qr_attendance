@@ -28,7 +28,7 @@ class ScannerBox extends GetView<CameraController> {
               child: Center(
                 child: MobileScanner(
                   controller: scanner.cameraController,
-                  onDetect:(BarcodeCapture capture) async{},
+                  onDetect:scanner.onQrDetected,
                 ),
               ),
             ),
