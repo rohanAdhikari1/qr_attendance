@@ -27,36 +27,39 @@ class ScannerPage extends GetView<ScannerController> {
             const GridBackground(),
             StatusBar(),
             SafeArea(
-              child: Column(
-                children: [
-                  TopBar(),
-                  SizedBox(height: 10),
-                  ClockHeader(),
-                  const Column(
-                    children: [
-                      Text(
-                        'Hold your QR code to the camera',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textPrimary,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TopBar(),
+                    SizedBox(height: 30),
+                    ClockHeader(),
+                    const SizedBox(height: 2),
+                    const Column(
+                      children: [
+                        Text(
+                          'Hold your QR code to the camera',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Position within the frame below',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textSecondary,
+                        SizedBox(height: 2),
+                        Text(
+                          'Position within the frame below',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textSecondary,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const ScannerBox(),
-                  const SizedBox(height: 28),
-                  const HintCard(),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 45),
+                    const ScannerBox(),
+                    const SizedBox(height: 35),
+                    const HintCard(),
+                  ],
+                ),
               ),
             ),
             SuccessOverlay(),

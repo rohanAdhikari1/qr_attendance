@@ -29,15 +29,55 @@ class $AttendancesTableTable extends AttendancesTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _timestampMeta = const VerificationMeta(
-    'timestamp',
-  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
-    'timestamp',
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _entryTimeMeta = const VerificationMeta(
+    'entryTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> entryTime = GeneratedColumn<DateTime>(
+    'entry_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _exitTimeMeta = const VerificationMeta(
+    'exitTime',
+  );
+  @override
+  late final GeneratedColumn<DateTime> exitTime = GeneratedColumn<DateTime>(
+    'exit_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _timelapsesMeta = const VerificationMeta(
+    'timelapses',
+  );
+  @override
+  late final GeneratedColumn<String> timelapses = GeneratedColumn<String>(
+    'timelapses',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   static const VerificationMeta _syncStatusMeta = const VerificationMeta(
@@ -62,37 +102,6 @@ class $AttendancesTableTable extends AttendancesTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _studentNameMeta = const VerificationMeta(
-    'studentName',
-  );
-  @override
-  late final GeneratedColumn<String> studentName = GeneratedColumn<String>(
-    'student_name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _classNameMeta = const VerificationMeta(
-    'className',
-  );
-  @override
-  late final GeneratedColumn<String> className = GeneratedColumn<String>(
-    'class_name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _gradeMeta = const VerificationMeta('grade');
-  @override
-  late final GeneratedColumn<String> grade = GeneratedColumn<String>(
-    'grade',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
   static const VerificationMeta _retryCountMeta = const VerificationMeta(
     'retryCount',
   );
@@ -105,17 +114,44 @@ class $AttendancesTableTable extends AttendancesTable
     requiredDuringInsert: false,
     defaultValue: const Constant(0),
   );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     studentId,
-    timestamp,
+    date,
+    entryTime,
+    exitTime,
+    timelapses,
+    status,
     syncStatus,
     rawQrData,
-    studentName,
-    className,
-    grade,
     retryCount,
+    createdAt,
+    updatedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -142,13 +178,41 @@ class $AttendancesTableTable extends AttendancesTable
     } else if (isInserting) {
       context.missing(_studentIdMeta);
     }
-    if (data.containsKey('timestamp')) {
+    if (data.containsKey('date')) {
       context.handle(
-        _timestampMeta,
-        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
       );
     } else if (isInserting) {
-      context.missing(_timestampMeta);
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('entry_time')) {
+      context.handle(
+        _entryTimeMeta,
+        entryTime.isAcceptableOrUnknown(data['entry_time']!, _entryTimeMeta),
+      );
+    }
+    if (data.containsKey('exit_time')) {
+      context.handle(
+        _exitTimeMeta,
+        exitTime.isAcceptableOrUnknown(data['exit_time']!, _exitTimeMeta),
+      );
+    }
+    if (data.containsKey('timelapses')) {
+      context.handle(
+        _timelapsesMeta,
+        timelapses.isAcceptableOrUnknown(data['timelapses']!, _timelapsesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timelapsesMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
     }
     if (data.containsKey('sync_status')) {
       context.handle(
@@ -166,37 +230,22 @@ class $AttendancesTableTable extends AttendancesTable
     } else if (isInserting) {
       context.missing(_rawQrDataMeta);
     }
-    if (data.containsKey('student_name')) {
-      context.handle(
-        _studentNameMeta,
-        studentName.isAcceptableOrUnknown(
-          data['student_name']!,
-          _studentNameMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_studentNameMeta);
-    }
-    if (data.containsKey('class_name')) {
-      context.handle(
-        _classNameMeta,
-        className.isAcceptableOrUnknown(data['class_name']!, _classNameMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_classNameMeta);
-    }
-    if (data.containsKey('grade')) {
-      context.handle(
-        _gradeMeta,
-        grade.isAcceptableOrUnknown(data['grade']!, _gradeMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_gradeMeta);
-    }
     if (data.containsKey('retry_count')) {
       context.handle(
         _retryCountMeta,
         retryCount.isAcceptableOrUnknown(data['retry_count']!, _retryCountMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
       );
     }
     return context;
@@ -206,7 +255,7 @@ class $AttendancesTableTable extends AttendancesTable
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {studentId, timestamp},
+    {studentId, date},
   ];
   @override
   AttendancesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
@@ -220,9 +269,25 @@ class $AttendancesTableTable extends AttendancesTable
         DriftSqlType.string,
         data['${effectivePrefix}student_id'],
       )!,
-      timestamp: attachedDatabase.typeMapping.read(
+      date: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}timestamp'],
+        data['${effectivePrefix}date'],
+      )!,
+      entryTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}entry_time'],
+      ),
+      exitTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}exit_time'],
+      ),
+      timelapses: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}timelapses'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
       )!,
       syncStatus: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -232,21 +297,17 @@ class $AttendancesTableTable extends AttendancesTable
         DriftSqlType.string,
         data['${effectivePrefix}raw_qr_data'],
       )!,
-      studentName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}student_name'],
-      )!,
-      className: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}class_name'],
-      )!,
-      grade: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}grade'],
-      )!,
       retryCount: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}retry_count'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
       )!,
     );
   }
@@ -261,36 +322,49 @@ class AttendancesTableData extends DataClass
     implements Insertable<AttendancesTableData> {
   final String id;
   final String studentId;
-  final DateTime timestamp;
+  final DateTime date;
+  final DateTime? entryTime;
+  final DateTime? exitTime;
+  final String timelapses;
+  final String status;
   final String syncStatus;
   final String rawQrData;
-  final String studentName;
-  final String className;
-  final String grade;
   final int retryCount;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   const AttendancesTableData({
     required this.id,
     required this.studentId,
-    required this.timestamp,
+    required this.date,
+    this.entryTime,
+    this.exitTime,
+    required this.timelapses,
+    required this.status,
     required this.syncStatus,
     required this.rawQrData,
-    required this.studentName,
-    required this.className,
-    required this.grade,
     required this.retryCount,
+    required this.createdAt,
+    required this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['student_id'] = Variable<String>(studentId);
-    map['timestamp'] = Variable<DateTime>(timestamp);
+    map['date'] = Variable<DateTime>(date);
+    if (!nullToAbsent || entryTime != null) {
+      map['entry_time'] = Variable<DateTime>(entryTime);
+    }
+    if (!nullToAbsent || exitTime != null) {
+      map['exit_time'] = Variable<DateTime>(exitTime);
+    }
+    map['timelapses'] = Variable<String>(timelapses);
+    map['status'] = Variable<String>(status);
     map['sync_status'] = Variable<String>(syncStatus);
     map['raw_qr_data'] = Variable<String>(rawQrData);
-    map['student_name'] = Variable<String>(studentName);
-    map['class_name'] = Variable<String>(className);
-    map['grade'] = Variable<String>(grade);
     map['retry_count'] = Variable<int>(retryCount);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
@@ -298,13 +372,20 @@ class AttendancesTableData extends DataClass
     return AttendancesTableCompanion(
       id: Value(id),
       studentId: Value(studentId),
-      timestamp: Value(timestamp),
+      date: Value(date),
+      entryTime: entryTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(entryTime),
+      exitTime: exitTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(exitTime),
+      timelapses: Value(timelapses),
+      status: Value(status),
       syncStatus: Value(syncStatus),
       rawQrData: Value(rawQrData),
-      studentName: Value(studentName),
-      className: Value(className),
-      grade: Value(grade),
       retryCount: Value(retryCount),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
     );
   }
 
@@ -316,13 +397,16 @@ class AttendancesTableData extends DataClass
     return AttendancesTableData(
       id: serializer.fromJson<String>(json['id']),
       studentId: serializer.fromJson<String>(json['studentId']),
-      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      entryTime: serializer.fromJson<DateTime?>(json['entryTime']),
+      exitTime: serializer.fromJson<DateTime?>(json['exitTime']),
+      timelapses: serializer.fromJson<String>(json['timelapses']),
+      status: serializer.fromJson<String>(json['status']),
       syncStatus: serializer.fromJson<String>(json['syncStatus']),
       rawQrData: serializer.fromJson<String>(json['rawQrData']),
-      studentName: serializer.fromJson<String>(json['studentName']),
-      className: serializer.fromJson<String>(json['className']),
-      grade: serializer.fromJson<String>(json['grade']),
       retryCount: serializer.fromJson<int>(json['retryCount']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
   @override
@@ -331,54 +415,66 @@ class AttendancesTableData extends DataClass
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'studentId': serializer.toJson<String>(studentId),
-      'timestamp': serializer.toJson<DateTime>(timestamp),
+      'date': serializer.toJson<DateTime>(date),
+      'entryTime': serializer.toJson<DateTime?>(entryTime),
+      'exitTime': serializer.toJson<DateTime?>(exitTime),
+      'timelapses': serializer.toJson<String>(timelapses),
+      'status': serializer.toJson<String>(status),
       'syncStatus': serializer.toJson<String>(syncStatus),
       'rawQrData': serializer.toJson<String>(rawQrData),
-      'studentName': serializer.toJson<String>(studentName),
-      'className': serializer.toJson<String>(className),
-      'grade': serializer.toJson<String>(grade),
       'retryCount': serializer.toJson<int>(retryCount),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
   AttendancesTableData copyWith({
     String? id,
     String? studentId,
-    DateTime? timestamp,
+    DateTime? date,
+    Value<DateTime?> entryTime = const Value.absent(),
+    Value<DateTime?> exitTime = const Value.absent(),
+    String? timelapses,
+    String? status,
     String? syncStatus,
     String? rawQrData,
-    String? studentName,
-    String? className,
-    String? grade,
     int? retryCount,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) => AttendancesTableData(
     id: id ?? this.id,
     studentId: studentId ?? this.studentId,
-    timestamp: timestamp ?? this.timestamp,
+    date: date ?? this.date,
+    entryTime: entryTime.present ? entryTime.value : this.entryTime,
+    exitTime: exitTime.present ? exitTime.value : this.exitTime,
+    timelapses: timelapses ?? this.timelapses,
+    status: status ?? this.status,
     syncStatus: syncStatus ?? this.syncStatus,
     rawQrData: rawQrData ?? this.rawQrData,
-    studentName: studentName ?? this.studentName,
-    className: className ?? this.className,
-    grade: grade ?? this.grade,
     retryCount: retryCount ?? this.retryCount,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
   );
   AttendancesTableData copyWithCompanion(AttendancesTableCompanion data) {
     return AttendancesTableData(
       id: data.id.present ? data.id.value : this.id,
       studentId: data.studentId.present ? data.studentId.value : this.studentId,
-      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
+      date: data.date.present ? data.date.value : this.date,
+      entryTime: data.entryTime.present ? data.entryTime.value : this.entryTime,
+      exitTime: data.exitTime.present ? data.exitTime.value : this.exitTime,
+      timelapses: data.timelapses.present
+          ? data.timelapses.value
+          : this.timelapses,
+      status: data.status.present ? data.status.value : this.status,
       syncStatus: data.syncStatus.present
           ? data.syncStatus.value
           : this.syncStatus,
       rawQrData: data.rawQrData.present ? data.rawQrData.value : this.rawQrData,
-      studentName: data.studentName.present
-          ? data.studentName.value
-          : this.studentName,
-      className: data.className.present ? data.className.value : this.className,
-      grade: data.grade.present ? data.grade.value : this.grade,
       retryCount: data.retryCount.present
           ? data.retryCount.value
           : this.retryCount,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
@@ -387,13 +483,16 @@ class AttendancesTableData extends DataClass
     return (StringBuffer('AttendancesTableData(')
           ..write('id: $id, ')
           ..write('studentId: $studentId, ')
-          ..write('timestamp: $timestamp, ')
+          ..write('date: $date, ')
+          ..write('entryTime: $entryTime, ')
+          ..write('exitTime: $exitTime, ')
+          ..write('timelapses: $timelapses, ')
+          ..write('status: $status, ')
           ..write('syncStatus: $syncStatus, ')
           ..write('rawQrData: $rawQrData, ')
-          ..write('studentName: $studentName, ')
-          ..write('className: $className, ')
-          ..write('grade: $grade, ')
-          ..write('retryCount: $retryCount')
+          ..write('retryCount: $retryCount, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
@@ -402,13 +501,16 @@ class AttendancesTableData extends DataClass
   int get hashCode => Object.hash(
     id,
     studentId,
-    timestamp,
+    date,
+    entryTime,
+    exitTime,
+    timelapses,
+    status,
     syncStatus,
     rawQrData,
-    studentName,
-    className,
-    grade,
     retryCount,
+    createdAt,
+    updatedAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -416,79 +518,96 @@ class AttendancesTableData extends DataClass
       (other is AttendancesTableData &&
           other.id == this.id &&
           other.studentId == this.studentId &&
-          other.timestamp == this.timestamp &&
+          other.date == this.date &&
+          other.entryTime == this.entryTime &&
+          other.exitTime == this.exitTime &&
+          other.timelapses == this.timelapses &&
+          other.status == this.status &&
           other.syncStatus == this.syncStatus &&
           other.rawQrData == this.rawQrData &&
-          other.studentName == this.studentName &&
-          other.className == this.className &&
-          other.grade == this.grade &&
-          other.retryCount == this.retryCount);
+          other.retryCount == this.retryCount &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
 }
 
 class AttendancesTableCompanion extends UpdateCompanion<AttendancesTableData> {
   final Value<String> id;
   final Value<String> studentId;
-  final Value<DateTime> timestamp;
+  final Value<DateTime> date;
+  final Value<DateTime?> entryTime;
+  final Value<DateTime?> exitTime;
+  final Value<String> timelapses;
+  final Value<String> status;
   final Value<String> syncStatus;
   final Value<String> rawQrData;
-  final Value<String> studentName;
-  final Value<String> className;
-  final Value<String> grade;
   final Value<int> retryCount;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const AttendancesTableCompanion({
     this.id = const Value.absent(),
     this.studentId = const Value.absent(),
-    this.timestamp = const Value.absent(),
+    this.date = const Value.absent(),
+    this.entryTime = const Value.absent(),
+    this.exitTime = const Value.absent(),
+    this.timelapses = const Value.absent(),
+    this.status = const Value.absent(),
     this.syncStatus = const Value.absent(),
     this.rawQrData = const Value.absent(),
-    this.studentName = const Value.absent(),
-    this.className = const Value.absent(),
-    this.grade = const Value.absent(),
     this.retryCount = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AttendancesTableCompanion.insert({
     required String id,
     required String studentId,
-    required DateTime timestamp,
+    required DateTime date,
+    this.entryTime = const Value.absent(),
+    this.exitTime = const Value.absent(),
+    required String timelapses,
+    required String status,
     required String syncStatus,
     required String rawQrData,
-    required String studentName,
-    required String className,
-    required String grade,
     this.retryCount = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        studentId = Value(studentId),
-       timestamp = Value(timestamp),
+       date = Value(date),
+       timelapses = Value(timelapses),
+       status = Value(status),
        syncStatus = Value(syncStatus),
-       rawQrData = Value(rawQrData),
-       studentName = Value(studentName),
-       className = Value(className),
-       grade = Value(grade);
+       rawQrData = Value(rawQrData);
   static Insertable<AttendancesTableData> custom({
     Expression<String>? id,
     Expression<String>? studentId,
-    Expression<DateTime>? timestamp,
+    Expression<DateTime>? date,
+    Expression<DateTime>? entryTime,
+    Expression<DateTime>? exitTime,
+    Expression<String>? timelapses,
+    Expression<String>? status,
     Expression<String>? syncStatus,
     Expression<String>? rawQrData,
-    Expression<String>? studentName,
-    Expression<String>? className,
-    Expression<String>? grade,
     Expression<int>? retryCount,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (studentId != null) 'student_id': studentId,
-      if (timestamp != null) 'timestamp': timestamp,
+      if (date != null) 'date': date,
+      if (entryTime != null) 'entry_time': entryTime,
+      if (exitTime != null) 'exit_time': exitTime,
+      if (timelapses != null) 'timelapses': timelapses,
+      if (status != null) 'status': status,
       if (syncStatus != null) 'sync_status': syncStatus,
       if (rawQrData != null) 'raw_qr_data': rawQrData,
-      if (studentName != null) 'student_name': studentName,
-      if (className != null) 'class_name': className,
-      if (grade != null) 'grade': grade,
       if (retryCount != null) 'retry_count': retryCount,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -496,25 +615,31 @@ class AttendancesTableCompanion extends UpdateCompanion<AttendancesTableData> {
   AttendancesTableCompanion copyWith({
     Value<String>? id,
     Value<String>? studentId,
-    Value<DateTime>? timestamp,
+    Value<DateTime>? date,
+    Value<DateTime?>? entryTime,
+    Value<DateTime?>? exitTime,
+    Value<String>? timelapses,
+    Value<String>? status,
     Value<String>? syncStatus,
     Value<String>? rawQrData,
-    Value<String>? studentName,
-    Value<String>? className,
-    Value<String>? grade,
     Value<int>? retryCount,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
     Value<int>? rowid,
   }) {
     return AttendancesTableCompanion(
       id: id ?? this.id,
       studentId: studentId ?? this.studentId,
-      timestamp: timestamp ?? this.timestamp,
+      date: date ?? this.date,
+      entryTime: entryTime ?? this.entryTime,
+      exitTime: exitTime ?? this.exitTime,
+      timelapses: timelapses ?? this.timelapses,
+      status: status ?? this.status,
       syncStatus: syncStatus ?? this.syncStatus,
       rawQrData: rawQrData ?? this.rawQrData,
-      studentName: studentName ?? this.studentName,
-      className: className ?? this.className,
-      grade: grade ?? this.grade,
       retryCount: retryCount ?? this.retryCount,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -528,8 +653,20 @@ class AttendancesTableCompanion extends UpdateCompanion<AttendancesTableData> {
     if (studentId.present) {
       map['student_id'] = Variable<String>(studentId.value);
     }
-    if (timestamp.present) {
-      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (entryTime.present) {
+      map['entry_time'] = Variable<DateTime>(entryTime.value);
+    }
+    if (exitTime.present) {
+      map['exit_time'] = Variable<DateTime>(exitTime.value);
+    }
+    if (timelapses.present) {
+      map['timelapses'] = Variable<String>(timelapses.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
     }
     if (syncStatus.present) {
       map['sync_status'] = Variable<String>(syncStatus.value);
@@ -537,17 +674,14 @@ class AttendancesTableCompanion extends UpdateCompanion<AttendancesTableData> {
     if (rawQrData.present) {
       map['raw_qr_data'] = Variable<String>(rawQrData.value);
     }
-    if (studentName.present) {
-      map['student_name'] = Variable<String>(studentName.value);
-    }
-    if (className.present) {
-      map['class_name'] = Variable<String>(className.value);
-    }
-    if (grade.present) {
-      map['grade'] = Variable<String>(grade.value);
-    }
     if (retryCount.present) {
       map['retry_count'] = Variable<int>(retryCount.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -560,13 +694,16 @@ class AttendancesTableCompanion extends UpdateCompanion<AttendancesTableData> {
     return (StringBuffer('AttendancesTableCompanion(')
           ..write('id: $id, ')
           ..write('studentId: $studentId, ')
-          ..write('timestamp: $timestamp, ')
+          ..write('date: $date, ')
+          ..write('entryTime: $entryTime, ')
+          ..write('exitTime: $exitTime, ')
+          ..write('timelapses: $timelapses, ')
+          ..write('status: $status, ')
           ..write('syncStatus: $syncStatus, ')
           ..write('rawQrData: $rawQrData, ')
-          ..write('studentName: $studentName, ')
-          ..write('className: $className, ')
-          ..write('grade: $grade, ')
           ..write('retryCount: $retryCount, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -638,6 +775,39 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _addressMeta = const VerificationMeta(
+    'address',
+  );
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+    'address',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _guardianNameMeta = const VerificationMeta(
+    'guardianName',
+  );
+  @override
+  late final GeneratedColumn<String> guardianName = GeneratedColumn<String>(
+    'guardian_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _guardianPhoneMeta = const VerificationMeta(
+    'guardianPhone',
+  );
+  @override
+  late final GeneratedColumn<String> guardianPhone = GeneratedColumn<String>(
+    'guardian_phone',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _cachedAtMeta = const VerificationMeta(
     'cachedAt',
   );
@@ -657,6 +827,9 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
     className,
     grade,
     photoUrl,
+    address,
+    guardianName,
+    guardianPhone,
     cachedAt,
   ];
   @override
@@ -715,6 +888,36 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
         photoUrl.isAcceptableOrUnknown(data['photo_url']!, _photoUrlMeta),
       );
     }
+    if (data.containsKey('address')) {
+      context.handle(
+        _addressMeta,
+        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_addressMeta);
+    }
+    if (data.containsKey('guardian_name')) {
+      context.handle(
+        _guardianNameMeta,
+        guardianName.isAcceptableOrUnknown(
+          data['guardian_name']!,
+          _guardianNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_guardianNameMeta);
+    }
+    if (data.containsKey('guardian_phone')) {
+      context.handle(
+        _guardianPhoneMeta,
+        guardianPhone.isAcceptableOrUnknown(
+          data['guardian_phone']!,
+          _guardianPhoneMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_guardianPhoneMeta);
+    }
     if (data.containsKey('cached_at')) {
       context.handle(
         _cachedAtMeta,
@@ -756,6 +959,18 @@ class $StudentsTable extends Students with TableInfo<$StudentsTable, Student> {
         DriftSqlType.string,
         data['${effectivePrefix}photo_url'],
       ),
+      address: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}address'],
+      )!,
+      guardianName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}guardian_name'],
+      )!,
+      guardianPhone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}guardian_phone'],
+      )!,
       cachedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}cached_at'],
@@ -776,6 +991,9 @@ class Student extends DataClass implements Insertable<Student> {
   final String className;
   final String grade;
   final String? photoUrl;
+  final String address;
+  final String guardianName;
+  final String guardianPhone;
   final DateTime cachedAt;
   const Student({
     required this.studentId,
@@ -784,6 +1002,9 @@ class Student extends DataClass implements Insertable<Student> {
     required this.className,
     required this.grade,
     this.photoUrl,
+    required this.address,
+    required this.guardianName,
+    required this.guardianPhone,
     required this.cachedAt,
   });
   @override
@@ -799,6 +1020,9 @@ class Student extends DataClass implements Insertable<Student> {
     if (!nullToAbsent || photoUrl != null) {
       map['photo_url'] = Variable<String>(photoUrl);
     }
+    map['address'] = Variable<String>(address);
+    map['guardian_name'] = Variable<String>(guardianName);
+    map['guardian_phone'] = Variable<String>(guardianPhone);
     map['cached_at'] = Variable<DateTime>(cachedAt);
     return map;
   }
@@ -815,6 +1039,9 @@ class Student extends DataClass implements Insertable<Student> {
       photoUrl: photoUrl == null && nullToAbsent
           ? const Value.absent()
           : Value(photoUrl),
+      address: Value(address),
+      guardianName: Value(guardianName),
+      guardianPhone: Value(guardianPhone),
       cachedAt: Value(cachedAt),
     );
   }
@@ -831,6 +1058,9 @@ class Student extends DataClass implements Insertable<Student> {
       className: serializer.fromJson<String>(json['className']),
       grade: serializer.fromJson<String>(json['grade']),
       photoUrl: serializer.fromJson<String?>(json['photoUrl']),
+      address: serializer.fromJson<String>(json['address']),
+      guardianName: serializer.fromJson<String>(json['guardianName']),
+      guardianPhone: serializer.fromJson<String>(json['guardianPhone']),
       cachedAt: serializer.fromJson<DateTime>(json['cachedAt']),
     );
   }
@@ -844,6 +1074,9 @@ class Student extends DataClass implements Insertable<Student> {
       'className': serializer.toJson<String>(className),
       'grade': serializer.toJson<String>(grade),
       'photoUrl': serializer.toJson<String?>(photoUrl),
+      'address': serializer.toJson<String>(address),
+      'guardianName': serializer.toJson<String>(guardianName),
+      'guardianPhone': serializer.toJson<String>(guardianPhone),
       'cachedAt': serializer.toJson<DateTime>(cachedAt),
     };
   }
@@ -855,6 +1088,9 @@ class Student extends DataClass implements Insertable<Student> {
     String? className,
     String? grade,
     Value<String?> photoUrl = const Value.absent(),
+    String? address,
+    String? guardianName,
+    String? guardianPhone,
     DateTime? cachedAt,
   }) => Student(
     studentId: studentId ?? this.studentId,
@@ -863,6 +1099,9 @@ class Student extends DataClass implements Insertable<Student> {
     className: className ?? this.className,
     grade: grade ?? this.grade,
     photoUrl: photoUrl.present ? photoUrl.value : this.photoUrl,
+    address: address ?? this.address,
+    guardianName: guardianName ?? this.guardianName,
+    guardianPhone: guardianPhone ?? this.guardianPhone,
     cachedAt: cachedAt ?? this.cachedAt,
   );
   Student copyWithCompanion(StudentsCompanion data) {
@@ -873,6 +1112,13 @@ class Student extends DataClass implements Insertable<Student> {
       className: data.className.present ? data.className.value : this.className,
       grade: data.grade.present ? data.grade.value : this.grade,
       photoUrl: data.photoUrl.present ? data.photoUrl.value : this.photoUrl,
+      address: data.address.present ? data.address.value : this.address,
+      guardianName: data.guardianName.present
+          ? data.guardianName.value
+          : this.guardianName,
+      guardianPhone: data.guardianPhone.present
+          ? data.guardianPhone.value
+          : this.guardianPhone,
       cachedAt: data.cachedAt.present ? data.cachedAt.value : this.cachedAt,
     );
   }
@@ -886,14 +1132,27 @@ class Student extends DataClass implements Insertable<Student> {
           ..write('className: $className, ')
           ..write('grade: $grade, ')
           ..write('photoUrl: $photoUrl, ')
+          ..write('address: $address, ')
+          ..write('guardianName: $guardianName, ')
+          ..write('guardianPhone: $guardianPhone, ')
           ..write('cachedAt: $cachedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(studentId, name, phone, className, grade, photoUrl, cachedAt);
+  int get hashCode => Object.hash(
+    studentId,
+    name,
+    phone,
+    className,
+    grade,
+    photoUrl,
+    address,
+    guardianName,
+    guardianPhone,
+    cachedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -904,6 +1163,9 @@ class Student extends DataClass implements Insertable<Student> {
           other.className == this.className &&
           other.grade == this.grade &&
           other.photoUrl == this.photoUrl &&
+          other.address == this.address &&
+          other.guardianName == this.guardianName &&
+          other.guardianPhone == this.guardianPhone &&
           other.cachedAt == this.cachedAt);
 }
 
@@ -914,6 +1176,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
   final Value<String> className;
   final Value<String> grade;
   final Value<String?> photoUrl;
+  final Value<String> address;
+  final Value<String> guardianName;
+  final Value<String> guardianPhone;
   final Value<DateTime> cachedAt;
   final Value<int> rowid;
   const StudentsCompanion({
@@ -923,6 +1188,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     this.className = const Value.absent(),
     this.grade = const Value.absent(),
     this.photoUrl = const Value.absent(),
+    this.address = const Value.absent(),
+    this.guardianName = const Value.absent(),
+    this.guardianPhone = const Value.absent(),
     this.cachedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -933,12 +1201,18 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     required String className,
     required String grade,
     this.photoUrl = const Value.absent(),
+    required String address,
+    required String guardianName,
+    required String guardianPhone,
     required DateTime cachedAt,
     this.rowid = const Value.absent(),
   }) : studentId = Value(studentId),
        name = Value(name),
        className = Value(className),
        grade = Value(grade),
+       address = Value(address),
+       guardianName = Value(guardianName),
+       guardianPhone = Value(guardianPhone),
        cachedAt = Value(cachedAt);
   static Insertable<Student> custom({
     Expression<String>? studentId,
@@ -947,6 +1221,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     Expression<String>? className,
     Expression<String>? grade,
     Expression<String>? photoUrl,
+    Expression<String>? address,
+    Expression<String>? guardianName,
+    Expression<String>? guardianPhone,
     Expression<DateTime>? cachedAt,
     Expression<int>? rowid,
   }) {
@@ -957,6 +1234,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
       if (className != null) 'class_name': className,
       if (grade != null) 'grade': grade,
       if (photoUrl != null) 'photo_url': photoUrl,
+      if (address != null) 'address': address,
+      if (guardianName != null) 'guardian_name': guardianName,
+      if (guardianPhone != null) 'guardian_phone': guardianPhone,
       if (cachedAt != null) 'cached_at': cachedAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -969,6 +1249,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     Value<String>? className,
     Value<String>? grade,
     Value<String?>? photoUrl,
+    Value<String>? address,
+    Value<String>? guardianName,
+    Value<String>? guardianPhone,
     Value<DateTime>? cachedAt,
     Value<int>? rowid,
   }) {
@@ -979,6 +1262,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
       className: className ?? this.className,
       grade: grade ?? this.grade,
       photoUrl: photoUrl ?? this.photoUrl,
+      address: address ?? this.address,
+      guardianName: guardianName ?? this.guardianName,
+      guardianPhone: guardianPhone ?? this.guardianPhone,
       cachedAt: cachedAt ?? this.cachedAt,
       rowid: rowid ?? this.rowid,
     );
@@ -1005,6 +1291,15 @@ class StudentsCompanion extends UpdateCompanion<Student> {
     if (photoUrl.present) {
       map['photo_url'] = Variable<String>(photoUrl.value);
     }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (guardianName.present) {
+      map['guardian_name'] = Variable<String>(guardianName.value);
+    }
+    if (guardianPhone.present) {
+      map['guardian_phone'] = Variable<String>(guardianPhone.value);
+    }
     if (cachedAt.present) {
       map['cached_at'] = Variable<DateTime>(cachedAt.value);
     }
@@ -1023,6 +1318,9 @@ class StudentsCompanion extends UpdateCompanion<Student> {
           ..write('className: $className, ')
           ..write('grade: $grade, ')
           ..write('photoUrl: $photoUrl, ')
+          ..write('address: $address, ')
+          ..write('guardianName: $guardianName, ')
+          ..write('guardianPhone: $guardianPhone, ')
           ..write('cachedAt: $cachedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1051,26 +1349,32 @@ typedef $$AttendancesTableTableCreateCompanionBuilder =
     AttendancesTableCompanion Function({
       required String id,
       required String studentId,
-      required DateTime timestamp,
+      required DateTime date,
+      Value<DateTime?> entryTime,
+      Value<DateTime?> exitTime,
+      required String timelapses,
+      required String status,
       required String syncStatus,
       required String rawQrData,
-      required String studentName,
-      required String className,
-      required String grade,
       Value<int> retryCount,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
       Value<int> rowid,
     });
 typedef $$AttendancesTableTableUpdateCompanionBuilder =
     AttendancesTableCompanion Function({
       Value<String> id,
       Value<String> studentId,
-      Value<DateTime> timestamp,
+      Value<DateTime> date,
+      Value<DateTime?> entryTime,
+      Value<DateTime?> exitTime,
+      Value<String> timelapses,
+      Value<String> status,
       Value<String> syncStatus,
       Value<String> rawQrData,
-      Value<String> studentName,
-      Value<String> className,
-      Value<String> grade,
       Value<int> retryCount,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
       Value<int> rowid,
     });
 
@@ -1093,8 +1397,28 @@ class $$AttendancesTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get entryTime => $composableBuilder(
+    column: $table.entryTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get exitTime => $composableBuilder(
+    column: $table.exitTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get timelapses => $composableBuilder(
+    column: $table.timelapses,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1108,23 +1432,18 @@ class $$AttendancesTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get studentName => $composableBuilder(
-    column: $table.studentName,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get className => $composableBuilder(
-    column: $table.className,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get grade => $composableBuilder(
-    column: $table.grade,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get retryCount => $composableBuilder(
     column: $table.retryCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1148,8 +1467,28 @@ class $$AttendancesTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get entryTime => $composableBuilder(
+    column: $table.entryTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get exitTime => $composableBuilder(
+    column: $table.exitTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get timelapses => $composableBuilder(
+    column: $table.timelapses,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1163,23 +1502,18 @@ class $$AttendancesTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get studentName => $composableBuilder(
-    column: $table.studentName,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get className => $composableBuilder(
-    column: $table.className,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get grade => $composableBuilder(
-    column: $table.grade,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get retryCount => $composableBuilder(
     column: $table.retryCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -1199,8 +1533,22 @@ class $$AttendancesTableTableAnnotationComposer
   GeneratedColumn<String> get studentId =>
       $composableBuilder(column: $table.studentId, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get timestamp =>
-      $composableBuilder(column: $table.timestamp, builder: (column) => column);
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get entryTime =>
+      $composableBuilder(column: $table.entryTime, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get exitTime =>
+      $composableBuilder(column: $table.exitTime, builder: (column) => column);
+
+  GeneratedColumn<String> get timelapses => $composableBuilder(
+    column: $table.timelapses,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
 
   GeneratedColumn<String> get syncStatus => $composableBuilder(
     column: $table.syncStatus,
@@ -1210,21 +1558,16 @@ class $$AttendancesTableTableAnnotationComposer
   GeneratedColumn<String> get rawQrData =>
       $composableBuilder(column: $table.rawQrData, builder: (column) => column);
 
-  GeneratedColumn<String> get studentName => $composableBuilder(
-    column: $table.studentName,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get className =>
-      $composableBuilder(column: $table.className, builder: (column) => column);
-
-  GeneratedColumn<String> get grade =>
-      $composableBuilder(column: $table.grade, builder: (column) => column);
-
   GeneratedColumn<int> get retryCount => $composableBuilder(
     column: $table.retryCount,
     builder: (column) => column,
   );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
 class $$AttendancesTableTableTableManager
@@ -1266,48 +1609,60 @@ class $$AttendancesTableTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<String> studentId = const Value.absent(),
-                Value<DateTime> timestamp = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<DateTime?> entryTime = const Value.absent(),
+                Value<DateTime?> exitTime = const Value.absent(),
+                Value<String> timelapses = const Value.absent(),
+                Value<String> status = const Value.absent(),
                 Value<String> syncStatus = const Value.absent(),
                 Value<String> rawQrData = const Value.absent(),
-                Value<String> studentName = const Value.absent(),
-                Value<String> className = const Value.absent(),
-                Value<String> grade = const Value.absent(),
                 Value<int> retryCount = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AttendancesTableCompanion(
                 id: id,
                 studentId: studentId,
-                timestamp: timestamp,
+                date: date,
+                entryTime: entryTime,
+                exitTime: exitTime,
+                timelapses: timelapses,
+                status: status,
                 syncStatus: syncStatus,
                 rawQrData: rawQrData,
-                studentName: studentName,
-                className: className,
-                grade: grade,
                 retryCount: retryCount,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required String id,
                 required String studentId,
-                required DateTime timestamp,
+                required DateTime date,
+                Value<DateTime?> entryTime = const Value.absent(),
+                Value<DateTime?> exitTime = const Value.absent(),
+                required String timelapses,
+                required String status,
                 required String syncStatus,
                 required String rawQrData,
-                required String studentName,
-                required String className,
-                required String grade,
                 Value<int> retryCount = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AttendancesTableCompanion.insert(
                 id: id,
                 studentId: studentId,
-                timestamp: timestamp,
+                date: date,
+                entryTime: entryTime,
+                exitTime: exitTime,
+                timelapses: timelapses,
+                status: status,
                 syncStatus: syncStatus,
                 rawQrData: rawQrData,
-                studentName: studentName,
-                className: className,
-                grade: grade,
                 retryCount: retryCount,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -1347,6 +1702,9 @@ typedef $$StudentsTableCreateCompanionBuilder =
       required String className,
       required String grade,
       Value<String?> photoUrl,
+      required String address,
+      required String guardianName,
+      required String guardianPhone,
       required DateTime cachedAt,
       Value<int> rowid,
     });
@@ -1358,6 +1716,9 @@ typedef $$StudentsTableUpdateCompanionBuilder =
       Value<String> className,
       Value<String> grade,
       Value<String?> photoUrl,
+      Value<String> address,
+      Value<String> guardianName,
+      Value<String> guardianPhone,
       Value<DateTime> cachedAt,
       Value<int> rowid,
     });
@@ -1398,6 +1759,21 @@ class $$StudentsTableFilterComposer
 
   ColumnFilters<String> get photoUrl => $composableBuilder(
     column: $table.photoUrl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get guardianName => $composableBuilder(
+    column: $table.guardianName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get guardianPhone => $composableBuilder(
+    column: $table.guardianPhone,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1446,6 +1822,21 @@ class $$StudentsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get guardianName => $composableBuilder(
+    column: $table.guardianName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get guardianPhone => $composableBuilder(
+    column: $table.guardianPhone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get cachedAt => $composableBuilder(
     column: $table.cachedAt,
     builder: (column) => ColumnOrderings(column),
@@ -1478,6 +1869,19 @@ class $$StudentsTableAnnotationComposer
 
   GeneratedColumn<String> get photoUrl =>
       $composableBuilder(column: $table.photoUrl, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get guardianName => $composableBuilder(
+    column: $table.guardianName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get guardianPhone => $composableBuilder(
+    column: $table.guardianPhone,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get cachedAt =>
       $composableBuilder(column: $table.cachedAt, builder: (column) => column);
@@ -1517,6 +1921,9 @@ class $$StudentsTableTableManager
                 Value<String> className = const Value.absent(),
                 Value<String> grade = const Value.absent(),
                 Value<String?> photoUrl = const Value.absent(),
+                Value<String> address = const Value.absent(),
+                Value<String> guardianName = const Value.absent(),
+                Value<String> guardianPhone = const Value.absent(),
                 Value<DateTime> cachedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => StudentsCompanion(
@@ -1526,6 +1933,9 @@ class $$StudentsTableTableManager
                 className: className,
                 grade: grade,
                 photoUrl: photoUrl,
+                address: address,
+                guardianName: guardianName,
+                guardianPhone: guardianPhone,
                 cachedAt: cachedAt,
                 rowid: rowid,
               ),
@@ -1537,6 +1947,9 @@ class $$StudentsTableTableManager
                 required String className,
                 required String grade,
                 Value<String?> photoUrl = const Value.absent(),
+                required String address,
+                required String guardianName,
+                required String guardianPhone,
                 required DateTime cachedAt,
                 Value<int> rowid = const Value.absent(),
               }) => StudentsCompanion.insert(
@@ -1546,6 +1959,9 @@ class $$StudentsTableTableManager
                 className: className,
                 grade: grade,
                 photoUrl: photoUrl,
+                address: address,
+                guardianName: guardianName,
+                guardianPhone: guardianPhone,
                 cachedAt: cachedAt,
                 rowid: rowid,
               ),

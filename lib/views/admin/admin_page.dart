@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_attendance/theme/app_theme.dart';
 import 'package:qr_attendance/views/admin/widgets/lan_server_card.dart';
+import 'package:qr_attendance/views/admin/widgets/settings_card.dart';
 import 'package:qr_attendance/views/admin/widgets/student_cache_card.dart';
 
 class AdminPage extends StatelessWidget {
@@ -37,7 +38,7 @@ class AdminPage extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ── Settings ──────────────────────────────────────────────────────
-          // _SettingsCard(),
+          SettingsCard(),
           const SizedBox(height: 32),
         ],
       ),
