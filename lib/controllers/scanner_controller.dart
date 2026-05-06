@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,28 +7,30 @@ import 'package:qr_attendance/data/enums.dart';
 import 'package:qr_attendance/data/models/scanned_student.dart';
 import 'package:qr_attendance/services/get_storage_service.dart';
 import 'package:qr_attendance/views/scanner/widgets/admin_pin_dialog.dart';
-import 'package:uuid/uuid.dart';
 
 class ScannerController extends GetxController {
   MobileScannerController cameraController = MobileScannerController();
   final _storage = Get.find<GetStorageService>();
+  final scanState = ScanState.idle.obs;
   final isFlashOn = false.obs;
   String? _lastScanned;
+  final scannedStudent = Rxn<ScannedStudent>();
+  final errorMessage = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
     _initCamera();
-    lastScanned.value = ScannedStudent(studentId: '123', timestamp: DateTime.now(), syncStatus: SyncStatus.synced);
   }
 
   void _initCamera() {
     cameraController = MobileScannerController(
-      // detectionSpeed: DetectionSpeed.noDuplicates,
+      detectionSpeed: DetectionSpeed.noDuplicates,
       returnImage: false,
       autoZoom: true,
       invertImage: false,
-      facing: _storage.cameraView,
+      // facing: _storage.cameraView,
+      facing: CameraFacing.back,
       formats: [BarcodeFormat.qrCode],
 
     );
@@ -48,25 +49,48 @@ class ScannerController extends GetxController {
     cameraController.start();
   }
 
-  void onQrDetected(BarcodeCapture capture) async{
-    print('hello2');
+  void onQrDetected(BarcodeCapture capture) {
     final value = capture.barcodes.firstOrNull?.rawValue;
-    print('hello');
-    print(value);
     if (value == _lastScanned) return;
     _lastScanned = value;
     // Future.delayed(const Duration(seconds: 2), () {
     //   _lastScanned = null;
     // });
-    await _processQr(value!);
+    _processQr(value!);
   }
 
   Future<void> _processQr(String value) async{
     HapticFeedback.mediumImpact();
-    bool randomValue = Random().nextBool();
-    if(randomValue){
-      showFakeSuccessOverlay();
-    }
+    scanState.value = ScanState.scanning;
+    //now parse value get detail of student
+    //search for student id got studentId otherwise show unsupported qr error
+    //search for student with student_id
+    // if(found){
+      //save attendance
+    // }else{
+    await Future.delayed(5.seconds);
+    scanState.value=ScanState.error;
+    errorMessage.value="Checking for error overlay";
+  }
+
+  void resetState() {
+    scanState.value = ScanState.idle;
+    errorMessage.value = '';
+  }
+
+  void promptExit(BuildContext context,{bool dismissible=true}){
+    pauseCamera();
+    showDialog(
+      context: context,
+      barrierDismissible: dismissible,
+      builder: (_) => AdminPinDialog(onDismiss: resumeCamera),
+    );
+  }
+
+  @override
+  void onClose() {
+    cameraController.dispose();
+    super.onClose();
   }
 
 
@@ -89,11 +113,6 @@ class ScannerController extends GetxController {
 
 
 
-
-
-
-
-  final _uuid = const Uuid();
 
 
   final Map<String, dynamic> fakeStudent = {
@@ -105,24 +124,12 @@ class ScannerController extends GetxController {
     "room": "Room 12",
     "checkInTime": "08:42 AM",
   };
-  var scannedStudent = Rxn<Map<String, dynamic>>();
 
   var overlayCountdown = 5.obs;
 
-  final scanState = ScanState.idle.obs;
-  final lastScanned = Rxn<ScannedStudent>();
-  final errorMessage = ''.obs;
-
-
-
-  @override
-  void onClose() {
-    cameraController.dispose();
-    super.onClose();
-  }
 
   void showFakeSuccessOverlay() {
-    scannedStudent.value = fakeStudent;
+    // scannedStudent.value = fakeStudent;
 
     overlayCountdown.value = 5;
 
@@ -131,20 +138,4 @@ class ScannerController extends GetxController {
     });
   }
 
-
-  void resetState() {
-    scanState.value = ScanState.idle;
-    errorMessage.value = '';
-  }
-
-
-
-  void promptExit(BuildContext context,{bool dismissible=true}){
-    pauseCamera();
-    showDialog(
-      context: context,
-      barrierDismissible: dismissible,
-      builder: (_) => AdminPinDialog(onDismiss: resumeCamera),
-    );
-  }
 }

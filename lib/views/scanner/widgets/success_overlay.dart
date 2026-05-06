@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_attendance/controllers/scanner_controller.dart';
 import 'package:qr_attendance/controllers/success_overlay_controller.dart';
+import 'package:qr_attendance/data/enums.dart';
 import 'package:qr_attendance/theme/app_theme.dart';
 import 'package:qr_attendance/views/scanner/widgets/ripple_icon.dart';
 
@@ -15,7 +16,8 @@ class SuccessOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       final student = scannerCtrl.scannedStudent.value;
-      if (student == null) return const SizedBox.shrink();
+      final isSuccess = scannerCtrl.scanState.value == ScanState.success;
+      if (student == null || !isSuccess) return const SizedBox.shrink();
 
       return AnimatedBuilder(
         animation: ctrl.fadeCtrl,

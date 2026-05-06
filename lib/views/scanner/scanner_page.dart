@@ -62,7 +62,7 @@ class ScannerPage extends GetView<ScannerController> {
                 ),
               ),
             ),
-            SuccessOverlay(),
+            // SuccessOverlay(),
           ],
         ),
       ),

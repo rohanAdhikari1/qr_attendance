@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_attendance/controllers/camera_controller.dart';
 import 'package:qr_attendance/controllers/corner_painter.dart';
 import 'package:qr_attendance/controllers/scanner_controller.dart';
+import 'package:qr_attendance/data/enums.dart';
 import 'package:qr_attendance/theme/app_theme.dart';
 
 class ScannerBox extends GetView<CameraController> {
@@ -28,21 +29,20 @@ class ScannerBox extends GetView<CameraController> {
               child: Center(
                 child: MobileScanner(
                   controller: scanner.cameraController,
-                  onDetect:(BarcodeCapture capture){
-                    print('hi');
-                  },
+                  onDetect:scanner.onQrDetected,
                 ),
               ),
             ),
           ),
 
           // ── Scan beam ────────────────────────────────────────────────────
-          // Obx(() {
-          //   // if (controller.showSuccess || controller.showError) {
-          //   //   return const SizedBox.shrink();
-          //   // }
-          //
-          //   return
+          Obx(() {
+            var state = scanner.scanState.value;
+            if ( state!=ScanState.idle) {
+              return const SizedBox.shrink();
+            }
+
+            return
               AnimatedBuilder(
               animation: controller.beamAnim,
               builder: (_, __) {
@@ -88,38 +88,31 @@ class ScannerBox extends GetView<CameraController> {
                   ),
                 );
               },
-            )
-    // ;
-    //       })
-  ,
+            );
+          }),
 
-          // Obx(() {
-            // final errorType = controller.activeError.value;
-            //
-            // final Color baseColor = errorType == null
-            //     ? AppColors.scannerBorder
-            //     : errorType == ScanErrorType.alreadyMarked
-            //     ? AppColors.warning
-            //     : AppColors.error;
-
-            // final Color baseColor = AppColors.scannerBorder;
-
-            // return
-              AnimatedBuilder(
+          Obx(() {
+            final scanState = scanner.scanState.value;
+            final Color baseColor = scanState == ScanState.idle
+                ? AppColors.scannerBorder
+                : scanState == ScanState.success
+                ?AppColors.success:
+                scanState == ScanState.duplicate
+                ? AppColors.warning
+                : AppColors.error;
+            final isError = scanState == ScanState.error;
+            return AnimatedBuilder(
               animation: controller.cornerAlpha,
               builder: (_, __) => CustomPaint(
                 painter: CornerPainter(
-                  color:  AppColors.scannerBorder.withValues(
-                    // alpha: controller.showError ? controller.cornerAlpha.value : 1.0,
-                    alpha: 1.0,
+                  color:  baseColor.withValues(
+                    alpha: isError ? controller.cornerAlpha.value : 1.0,
                   ),
                 ),
                 child: const SizedBox.expand(),
               ),
-            )
-    // ;
-    //       })
-  ,
+            );
+          }),
         ],
       ),
     );
