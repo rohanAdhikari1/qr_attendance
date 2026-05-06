@@ -95,7 +95,7 @@ class ScannerBox extends GetView<CameraController> {
             final scanState = scanner.scanState.value;
             Color baseColor = AppColors.scannerBorder;
             if(scanState == ScanState.scanning){
-              baseColor = AppColors.scannerBorder;
+              baseColor = AppColors.primary;
             }
             if(scanState == ScanState.success){
               baseColor = AppColors.success;

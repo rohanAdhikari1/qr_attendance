@@ -63,11 +63,14 @@ class ScannerPage extends GetView<ScannerController> {
               ),
             ),
             // SuccessOverlay(),
-            const Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: ScannerErrorOverlay(),
+            const Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 90),
+                  child: ScannerErrorOverlay(),
+                ),
+              ),
             ),
           ],
         ),
