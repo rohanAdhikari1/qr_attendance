@@ -6,8 +6,8 @@ import 'package:qr_attendance/views/scanner/widgets/hint_card.dart';
 import 'package:qr_attendance/views/scanner/widgets/scanner_box.dart';
 import 'package:qr_attendance/views/scanner/widgets/clock_header.dart';
 import 'package:qr_attendance/views/scanner/widgets/grind_background.dart';
+import 'package:qr_attendance/views/scanner/widgets/scanner_error_overlay.dart';
 import 'package:qr_attendance/views/scanner/widgets/status_bar.dart';
-import 'package:qr_attendance/views/scanner/widgets/success_overlay.dart';
 import 'package:qr_attendance/views/scanner/widgets/top_bar.dart';
 
 class ScannerPage extends GetView<ScannerController> {
@@ -63,6 +63,12 @@ class ScannerPage extends GetView<ScannerController> {
               ),
             ),
             // SuccessOverlay(),
+            const Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: ScannerErrorOverlay(),
+            ),
           ],
         ),
       ),

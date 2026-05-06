@@ -15,7 +15,12 @@ class ScannerController extends GetxController {
   final isFlashOn = false.obs;
   String? _lastScanned;
   final scannedStudent = Rxn<ScannedStudent>();
-  final errorMessage = ''.obs;
+
+  final activeError = Rxn<ScanErrorType>();
+  final overlayCountdown = 5.obs;
+  // final alreadyMarkedInfo = Rxn<AlreadyMarkedInfo>();
+
+  Timer? _overlayTimer;
 
   @override
   void onInit() {
@@ -70,12 +75,55 @@ class ScannerController extends GetxController {
     // }else{
     await Future.delayed(5.seconds);
     scanState.value=ScanState.error;
-    errorMessage.value="Checking for error overlay";
+    showError(ScanErrorType.invalidQr);
+    return;
   }
 
-  void resetState() {
+  void showError(ScanErrorType type) {
+    activeError.value = type;
+
+    scanState.value = ScanState.error;
+
+    overlayCountdown.value = 5;
+
+    pauseCamera();
+
+    _overlayTimer?.cancel();
+
+    _overlayTimer = Timer.periodic(
+      const Duration(seconds: 1),
+          (timer) {
+        overlayCountdown.value--;
+
+        if (overlayCountdown.value <= 0) {
+          dismissError();
+        }
+      },
+    );
+  }
+
+  // ───────────────── DISMISS ERROR ─────────────────
+
+  void dismissError() {
+    _overlayTimer?.cancel();
+
+    activeError.value = null;
+
+    // alreadyMarkedInfo.value = null;
+
+    overlayCountdown.value = 5;
+
     scanState.value = ScanState.idle;
-    errorMessage.value = '';
+
+    resumeCamera();
+  }
+
+  // ───────────────── RESET ─────────────────
+
+  void resetState() {
+    dismissError();
+
+    scannedStudent.value = null;
   }
 
   void promptExit(BuildContext context,{bool dismissible=true}){
@@ -92,50 +140,4 @@ class ScannerController extends GetxController {
     cameraController.dispose();
     super.onClose();
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  final Map<String, dynamic> fakeStudent = {
-    "name": "John Doe",
-    "studentId": "ST-2026-001",
-    "classSection": "10-A",
-    "status": "Present",
-    "subject": "Mathematics",
-    "room": "Room 12",
-    "checkInTime": "08:42 AM",
-  };
-
-  var overlayCountdown = 5.obs;
-
-
-  void showFakeSuccessOverlay() {
-    // scannedStudent.value = fakeStudent;
-
-    overlayCountdown.value = 5;
-
-    Future.delayed(const Duration(seconds: 5), () {
-      scannedStudent.value = null;
-    });
-  }
-
 }

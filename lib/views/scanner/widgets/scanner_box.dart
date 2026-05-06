@@ -93,13 +93,19 @@ class ScannerBox extends GetView<CameraController> {
 
           Obx(() {
             final scanState = scanner.scanState.value;
-            final Color baseColor = scanState == ScanState.idle
-                ? AppColors.scannerBorder
-                : scanState == ScanState.success
-                ?AppColors.success:
-                scanState == ScanState.duplicate
-                ? AppColors.warning
-                : AppColors.error;
+            Color baseColor = AppColors.scannerBorder;
+            if(scanState == ScanState.scanning){
+              baseColor = AppColors.scannerBorder;
+            }
+            if(scanState == ScanState.success){
+              baseColor = AppColors.success;
+            }
+            if(scanState == ScanState.error){
+              baseColor = AppColors.error;
+            }
+            if(scanState == ScanState.duplicate){
+              baseColor=AppColors.warning;
+            }
             final isError = scanState == ScanState.error;
             return AnimatedBuilder(
               animation: controller.cornerAlpha,
