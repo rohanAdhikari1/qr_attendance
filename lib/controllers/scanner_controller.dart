@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_attendance/data/enums.dart';
@@ -24,9 +25,13 @@ class ScannerController extends GetxController {
 
   void _initCamera() {
     cameraController = MobileScannerController(
-      detectionSpeed: DetectionSpeed.noDuplicates,
+      // detectionSpeed: DetectionSpeed.noDuplicates,
       returnImage: false,
+      autoZoom: true,
+      invertImage: false,
       facing: _storage.cameraView,
+      formats: [BarcodeFormat.qrCode],
+
     );
   }
 
@@ -44,7 +49,9 @@ class ScannerController extends GetxController {
   }
 
   void onQrDetected(BarcodeCapture capture) async{
+    print('hello2');
     final value = capture.barcodes.firstOrNull?.rawValue;
+    print('hello');
     print(value);
     if (value == _lastScanned) return;
     _lastScanned = value;
@@ -55,6 +62,7 @@ class ScannerController extends GetxController {
   }
 
   Future<void> _processQr(String value) async{
+    HapticFeedback.mediumImpact();
     bool randomValue = Random().nextBool();
     if(randomValue){
       showFakeSuccessOverlay();
